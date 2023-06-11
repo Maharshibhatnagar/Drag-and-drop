@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500&family=Roboto:wght@100;300;400;500&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: white;
+        color: black;
+        width: 100%;
+        height: 100%;
+      }
+      .name {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+        margin-top: 10px;
+      }
+
+      .container-wrapper {
+        display: flex;
+        justify-content: center;
+      }
+
+      .container {
+        width: 200px;
+        height: 300px;
+        border: 1px solid black;
+        padding: 10px;
+        margin: 10px;
+        text-align: center;
+        transition: height 0.3s;
+        
+      }
+
+      .item {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        background-color: rgb(244, 102, 163);
+        border: 1px solid rgb(0, 0, 0);
+        margin: 5px;
+        padding: 5px;
+        cursor: move;
+        transition: transform 0.3s;
+      }
+
+      .item.dragging {
+        transform: scale(1.2);
+      }
+
+      .success-message {
+        color: rgb(67, 207, 67);
+        font-weight: bold;
+      }
+
+      .container2-grows {
+        height: auto;
+       
+        
+      }
+
+      .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 30px;
+        padding: 10px;
+      }
+
+      button {
+        padding: 10px 15px;
+        font-family: "Poppins";
+        cursor: pointer;
+
+        border-color: #3498db;
+        color: #000000;
+        box-shadow: 0 0 40px 40px #3498db inset, 0 0 0 0 #3498db;
+        transition: all 150ms ease-in-out;
+
+        &:hover {
+          box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
+        }
+      }
+
+      .dark-mode {
+        background-color: black;
+        color: white;
+        .container{
+            border: 1px solid rgb(255, 255, 255);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <button onclick="myFunction()">Dark mode</button>
+    <div class="name">Drag and Drop Functionality | Maharshi</div>
+    <div class="container-wrapper">
+      <div id="container1" class="container">
+        <div class="item" draggable="true">Item 1</div>
+        <div class="item" draggable="true">Item 2</div>
+        <div class="item" draggable="true">Item 3</div>
+      </div>
+
+      <div
+        id="container2"
+        class="container"
+        ondragover="allowDrop(event)"
+        ondrop="drop(event)"
+      >
+        Drop items here
+      </div>
+    </div>
+
+    <div class="btn">
+      <button onclick="resetContainers()">Reset</button>
+    </div>
+
+    <script>
+      const items = document.querySelectorAll(".item");
+      const container2 = document.getElementById("container2");
+      let draggedItem = null;
+
+      items.forEach((item) => {
+        item.addEventListener("dragstart", dragStart);
+        item.addEventListener("dragend", dragEnd);
+      });
+
+      container2.addEventListener("dragover", dragOver);
+      container2.addEventListener("dragenter", dragEnter);
+      container2.addEventListener("dragleave", dragLeave);
+      container2.addEventListener("drop", drop);
+
+      function dragStart() {
+        draggedItem = this;
+        this.classList.add("dragging");
+      }
+
+      function dragEnd() {
+        this.classList.remove("dragging");
+      }
+
+      function dragOver(e) {
+        e.preventDefault();
+      }
+
+      function dragEnter(e) {
+        e.preventDefault();
+        this.classList.add("drag-over");
+      }
+
+      function dragLeave() {
+        this.classList.remove("drag-over");
+      }
+
+      function drop() {
+        this.classList.remove("drag-over");
+        this.classList.add("container2-grows");
+        this.appendChild(draggedItem);
+
+        // Display success message
+        const successMessage = document.createElement("p");
+        successMessage.textContent = "Item dropped successfully!";
+        successMessage.classList.add("success-message");
+        this.appendChild(successMessage);
+      }
+
+      function resetContainers() {
+        container2.classList.remove("container2-grows");
+        container2.innerHTML = "Drop items here";
+        items.forEach((item) => {
+          document.getElementById("container1").appendChild(item);
+        });
+      }
+      function myFunction() {
+        var element = document.body;
+        element.classList.toggle("dark-mode");
+      }
+    </script>
+  </body>
+</html>
